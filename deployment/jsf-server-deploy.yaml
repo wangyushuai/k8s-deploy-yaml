@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-jsf-provider-deploy
+  namespace: jdsf
+  labels:
+    app: demo-jsf-provider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-jsf-provider
+  template:
+    metadata:
+      labels:
+        app: demo-jsf-provider
+    spec:
+      containers:
+      - name: demo-jsf-provider-deploy
+        image: xxx.jdcloud.com/jdsf-tpaas:demo-jsf-server-1.0.3
+        imagePullPolicy: IfNotPresent
+        #command: # 启动命令
+        #args: # 启动参数
+        resources:
+          limits:
+            memory: 1024Mi
+            cpu: 1000m
+        env:
+        - name : "CONSUL_ADDRESS"
+          value : "consul-cluster-0.consul-cluster.jd-tpaas.svc:8500" # 替换注册中心地址
+#       -  name: "JAGGER_HTTP_ADDRESS"
+#          value: "172.17.0.3"
+      imagePullSecrets:
+        - name: jcr-pull-secret
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jdsf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-jsf-provider
+  namespace: jdsf
+  labels:
+    app: demo-jsf-provider
+spec:
+  type: ClusterIP
+  ports:
+    - port: 22000
+      targetPort: 22000
+      protocol: TCP
+  selector:
+    app: demo-jsf-provider
+
+
+

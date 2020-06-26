@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-jsf-provider
+  namespace: jdsf
+  labels:
+    app: demo-jsf-provider
+spec:
+  type: ClusterIP
+  ports:
+    - port: 22000
+      targetPort: 22000
+      protocol: TCP
+  selector:
+    app: demo-jsf-provider

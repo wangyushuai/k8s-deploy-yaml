@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jaeger-ingress # 应用名称-ingress
+  namespace: jaeger
+  labels:
+    app: jaeger
+  annotations:
+    metadata.annotations.kubernetes.io/ingress.class: "nginx"     #指定Ingress Resource创建时使用的Ingress Controller，本例使用上述创建的Nginx Controller
+spec:
+  rules:
+    - host: jaeger.collector.ingress.jdcloud.com # 应用域名 Host
+      http:
+        paths:
+          - path: / # 访问路径
+            backend:
+              serviceName: jaeger-collector # service name
+              servicePort: 14268 # servicePort
+    - host: jaeger.query.ingress.jdcloud.com # 应用域名 Host
+      http:
+        paths:
+          - path: / # 访问路径
+            backend:
+              serviceName: jaeger-query # service name
+              servicePort: 80 # servicePort
+    - host: jaeger.monitor.ingress.jdcloud.com # 应用域名 Host
+      http:
+        paths:
+          - path: / # 访问路径
+            backend:
+              serviceName: jaeger-monitor # service name
+              servicePort: 14269 # servicePort

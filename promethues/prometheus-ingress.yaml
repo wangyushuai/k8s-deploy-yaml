@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-ingress # 应用名称-ingress
+  namespace: jke-system
+  annotations:
+    metadata.annotations.kubernetes.io/ingress.class: "nginx"     #指定Ingress Resource创建时使用的Ingress Controller，本例使用上述创建的Nginx Controller
+spec:
+  rules:
+  - host: prom.k8s.jdcloud.com # 应用域名 Host
+    http:
+      paths:
+      - path: / # 访问路径
+        backend:
+          serviceName: prometheus # service name
+          servicePort: 9090 # servicePort
+
